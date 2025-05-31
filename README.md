@@ -1,4 +1,4 @@
-## CICD with Kubernetes 실습 구조(Kubernetes Cluster 구성: master node(1EA), worker nodes(2EA), ArgoCD 구성)
+### CICD with Kubernetes 실습 구조(Kubernetes Cluster 구성: master node(1EA), worker nodes(2EA), ArgoCD 구성)
 
 ### Labs Server List
 | Server Name        | Server Hostname    | Specs                           | IP Address     | Port Forwarding(ssh) | Port Forwarding(http) |
