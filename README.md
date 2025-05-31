@@ -1,4 +1,4 @@
-## CICD-with-Kubernetes
+## CICD with Kubernetes
 
 ### Labs Server List
 | Server Name        | Server Hostname    | Specs                           | IP Address     | Port Forwarding(ssh) | Port Forwarding(http) |
@@ -239,9 +239,10 @@
 
           kubectl create namespace argocd
           kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-          
-          kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d && echo
 
+          # 비밀번호를 확인 할때
+          kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d && echo
+          # 삭제하고 싶을때
           kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
           kubectl delete namespace argocd         
 
