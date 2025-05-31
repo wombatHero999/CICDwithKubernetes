@@ -29,6 +29,11 @@
           code --install-extension vscjava.vscode-gradle
          함
 
+### Kubernetes Install Guides 
+          
+          # 각각의 버전별 설치 가이드
+          https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
+
 ### Configure Kubernetes IPv4 networking (all nodes)
           sudo nano   /etc/sysctl.d/k8s.conf
           # 밑에 3줄의 내용이 k8s.conf에 입력
@@ -69,6 +74,7 @@
           sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 ### Install Calico network add-on plugin
+          # https://docs.tigera.io/calico/latest/getting-started/kubernetes/quickstart 설치 및 가이드
           kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/tigera-operator.yaml
           curl https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/custom-resources.yaml -O
           sed -i 's/cidr: 192\.168\.0\.0\/16/cidr: 10.10.0.0\/16/g' custom-resources.yaml
