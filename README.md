@@ -160,6 +160,11 @@
           sudo install -o root -g root -m 0755 kubectl-argo-rollouts-linux-amd64 /usr/local/bin/kubectl-argo-rollouts
           kubectl argo rollouts version
 
+### ArgoCD Rollouts 
+
+          # 예제(github기반)
+          https://github.com/dennislee-it
+
 ### Etc
 - Docker install Ubuntu
  
