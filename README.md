@@ -234,17 +234,3 @@
           sudo chmod 666 /var/run/docker.sock or sudo chown root:docker /var/run/docker.sock
           sudo usermod -a -G docker jenkins
 
-- Etc
-
-          kubectl create -f nginx-pod.xml
-          kubectl get pods
-          kubectl get describe pod nginx
-          kubectl port-forward nginx 9000:80
-          kubectl delete pod nginx
-          
-          kubectl apply -f declarative-deployment.yaml
-          kubectl get deployments
-          kubectl apply -f declarative-deployment.yaml
-          kubectl diff -f declarative-deployment.yaml
-          
-          kubectl get deployment nginx-declarative -o=yaml
