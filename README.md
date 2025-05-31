@@ -1,11 +1,12 @@
-## CICD with Kubernetes
+## CICD with Kubernetes 실습 구조(Kubernetes Cluster 구성: master node(1EA), worker nodes(2EA), ArgoCD 구성)
 
 ### Labs Server List
 | Server Name        | Server Hostname    | Specs                           | IP Address     | Port Forwarding(ssh) | Port Forwarding(http) |
 | ------------------ | ------------------ | ------------------------------- | -------------- | -------------------- | --------------------- |
-| k8s-control        | k8s-control        | 2 vCPU, 4 GB RAM, 100GB Disk    | 192.168.15.101 |  25 -> 22            |  -                    |
+| k8s-control        | k8s-control        | 2 vCPU, 4 GB RAM, 100GB Disk    | 192.168.15.101 |  25 -> 22            |  -                    | 
 | worker-node-01     | worker-node-01     | 2 vCPU, 4 GB RAM, 100GB Disk    | 192.168.15.102 |  26 -> 22            |  -                    |
 | worker-node-02     | worker-node-02     | 2 vCPU, 4 GB RAM, 100GB Disk    | 192.168.15.103 |  27 -> 22            |  -                    |
+* 각각의 서버의 CPU는 2EA로 구성해야함. 1EA로 하면 실행 불가함. master node인 k8s-control은 실행시 느린 경우는 메모리를 8GB로 변경함. 다른 worker node도 Resource가 충분하면 8GB로 변환함.
 
 ### Visual Studio Code & VirtualBox
 
@@ -26,48 +27,15 @@
           code --install-extension ms-azuretools.vscode-docker
           code --install-extension vscjava.vscode-java-pack
           code --install-extension vscjava.vscode-gradle
-          code --install-extension vmware.vscode-boot-dev-pack
-          code --install-extension vscode-kubernetes-tools
-          code --install-extension vscode-docker
-          Visual Studio Code Remote SSH로 접속해서 접속이 되는지 확인
-
-### Ubuntu 64bit Server 22.04.x(Minimized) 설치 및 설정
-- After installing ubuntu 64 server minimum specifications
-- Create User => user1/1234
-          
-          sudo su
-          apt-get install net-tools iputils-ping nano vim
-          printf "Server Name(Each Server)" > /etc/hostname
-          printf "\n192.168.15.101 k8s-control\n192.168.15.102 worker-node-01\n192.168.15.103 worker-node-02\n\n" >> /etc/hosts
-          # 해당 터미널 세션 종류후 다시 접속
-          cat /etc/hosts
-          cat /etc/hostname
-          cat /etc/netplan/50-cloud-init.yaml
-          # ip를 수정하려면 50-cloud-init.yaml을 수정하기 위해서는 해당 파일을 생성하고 다음의 내용을 추가해야함
-          nano /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
-          network: {config: disabled}
-          nano /etc/netplan/50-cloud-init.yaml
-          => check ip or change ip
-          netplan apply
-
-### Disable swap space (all nodes) 스왑 항목을 off
-          sudo swapoff -a
-          # 재부팅 시 변경 사항을 유지하려면 /etc/fstab파일에 접근하여 스왑 항목 앞에 기호를 추가하여 주석 처리하세요 
-          swapon --show
-
-### Load Containerd modules (all nodes) 
-          sudo modprobe overlay
-          sudo modprobe br_netfilter
-          sudo tee /etc/modules-load.d/k8s.conf <<EOF
-          overlay
-          br_netfilter
-          EOF
+         함
 
 ### Configure Kubernetes IPv4 networking (all nodes)
           sudo nano   /etc/sysctl.d/k8s.conf
+          # 밑에 3줄의 내용이 k8s.conf에 입력
           net.bridge.bridge-nf-call-iptables  = 1
           net.bridge.bridge-nf-call-ip6tables = 1
           net.ipv4.ip_forward   = 1
+          # 위의 내용을 입력하고 다음 명령어 실행
           sudo sysctl --system
 
 ### Install Docker (on all nodes)
@@ -109,17 +77,18 @@
           kubectl get pods -A
           
 ### Add worker nodes to the cluster (on worker nodes)
+
+          # worker nodes를 master node에 join시 접속 경로를 모르는 경우, 확인 방법
           kubeadm token create --print-join-command
-          kubeadm join xx.xx.xx.xx:6443 --token xxxxxxxx \
+          # 실행 명령어 형식
+          kubeadm join [master node ip 주소를 확인해서 입력]:6443 --token xxxxxxxx \
         --discovery-token-ca-cert-hash xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-### 초기화
-          #################################
-          # kubeadm 초기화
-          $ sudo kubeadm reset
-          $ sudo systemctl restart kubelet
-          $ sudo reboot
-          ##################################
+### master node 초기화시
+          
+          sudo kubeadm reset
+          sudo systemctl restart kubelet
+          sudo reboot          
           
 ### Testing Kubernetes cluster
           kubectl create namespace demo-namespace
@@ -130,9 +99,7 @@
           curl http://<any-worker-IP>:node-port
           # 예) curl http://10.168.253.29:30115 
 
-
-
-### ArgoCD
+### ArgoCD 설치 및 사용방법
   
           https://argo-cd.readthedocs.io/en/stable/getting_started/ # 설치 가이드
   
