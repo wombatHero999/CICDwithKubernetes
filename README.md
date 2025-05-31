@@ -253,11 +253,6 @@
           # kubectl exec -it -n argocd deployment/argocd-server -- /bin/bash
           # argocd login localhost:8080 -> admin/확인된 비밀번호(비밀번호를 확인 할때 나온 비밀번호)
           # argocd account update-password 비빌번호를 변경하고 싶음
-
           # 삭제하고 싶을때
           kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-          kubectl delete namespace argocd         
-
-
-       
-       
+          kubectl delete namespace argocd
