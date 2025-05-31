@@ -234,7 +234,9 @@
           
           kubectl get deployment nginx-declarative -o=yaml
 
+
 - ArgoCD
+  
           https://argo-cd.readthedocs.io/en/stable/getting_started/ # 설치 가이드
           # 설치시
           kubectl create namespace argocd
