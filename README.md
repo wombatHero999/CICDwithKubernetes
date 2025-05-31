@@ -238,23 +238,38 @@
 - ArgoCD
   
           https://argo-cd.readthedocs.io/en/stable/getting_started/ # 설치 가이드
+  
           # 설치시
           kubectl create namespace argocd
           kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+  
           # 설치시 설치 상태 확인
           kubectl get pods -n argocd -w
+  
           # 설치후 접속 방법
           # 1. Service Type Load Balancer
           # kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
           # 2. Ingress
           # 3. Port Forwarding
           kubectl port-forward svc/argocd-server -n argocd 8080:443
+  
           # 비밀번호를 확인 할때
           kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d && echo
+  
           # argocd-server에 접속해서 확인하기
           # kubectl exec -it -n argocd deployment/argocd-server -- /bin/bash
           # argocd login localhost:8080 -> admin/확인된 비밀번호(비밀번호를 확인 할때 나온 비밀번호)
           # argocd account update-password 비빌번호를 변경하고 싶음
+
+          # default namespace를 argocd로 설정하고 싶을때
+          # kubectl get pods -n argocd
+          # kubectl config set-context --current --namespace=argocd
+          # kubectl get pods -n argocd
+          # kubectl get pods
+          # kubectl config view --minify | grep namespace:
+          # kubectl config set-context --current --namespace=default
+
+  
           # 삭제하고 싶을때
           kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
           kubectl delete namespace argocd
