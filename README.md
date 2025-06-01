@@ -8,6 +8,26 @@
 | worker-node-02     | worker-node-02     | 2 vCPU, 4 GB RAM, 100GB Disk    | 192.168.15.103 |  27 -> 22            |  -                    |
 * 각각의 서버의 CPU는 2EA로 구성해야함. 1EA로 하면 실행 불가함. master node인 k8s-control은 실행시 느린 경우는 메모리를 8GB로 변경함. 다른 worker node도 Resource가 충분하면 8GB로 변환함.
 
+Ubuntu 64bit Server 22.04.x(Minimized) 설치 및 설정
+After installing ubuntu 64 server minimum specifications
+
+Create User => user1/1234
+
+    sudo su
+    apt-get install net-tools iputils-ping nano vim
+    printf "Server Name(Each Server)" > /etc/hostname
+    printf "\n192.168.15.101 k8s-control\n192.168.15.102 worker-node-01\n192.168.15.103 worker-node-02\n\n" >> /etc/hosts
+    # 해당 터미널 세션 종류후 다시 접속
+    cat /etc/hosts
+    cat /etc/hostname
+    cat /etc/netplan/50-cloud-init.yaml
+    # ip를 수정하려면 50-cloud-init.yaml을 수정하기 위해서는 해당 파일을 생성하고 다음의 내용을 추가해야함
+    nano /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
+    network: {config: disabled}
+    nano /etc/netplan/50-cloud-init.yaml
+    => check ip or change ip
+    netplan apply
+
 ### Visual Studio Code & VirtualBox
 
           VirtualBox 설치
